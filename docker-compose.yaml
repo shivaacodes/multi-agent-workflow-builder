@@ -1,0 +1,39 @@
+version: "3.9"
+
+services:
+  backend:
+    build: ./backend
+    container_name: workflow-backend
+    ports:
+      - "8000:8000"
+    depends_on:
+      - chromadb
+    environment:
+      - CHROMA_HOST=chromadb
+      - CHROMA_PORT=8000
+    volumes:
+      - ./backend:/app
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  frontend:
+    build: ./frontend
+    container_name: workflow-frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+    command: npm run dev
+
+  chromadb:
+    image: chromadb/chroma:latest
+    container_name: workflow-chroma
+    ports:
+      - "8001:8000"   # map host:container (chroma runs on 8000 inside container)
+    volumes:
+      - chroma_data:/chroma
+
+volumes:
+  chroma_data:
