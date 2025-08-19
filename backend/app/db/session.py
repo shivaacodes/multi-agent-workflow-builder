@@ -3,7 +3,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-DATABASE_URL = "postgresql://shiva:Shivam007@localhost:5432/workflowdb"
+DATABASE_URL = "postgresql://shiva:Shivam007@db:5432/workflowdb"
 
 engine = create_engine(DATABASE_URL)
 

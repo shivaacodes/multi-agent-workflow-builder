@@ -3,3 +3,11 @@ uvicorn[standard]
 langchain
 chromadb
 pydantic
+psycopg2-binary
+email-validator
+passlib[bcrypt]
+PyJWT
+python-multipart
+alembic
+
+
