@@ -7,8 +7,10 @@ services:
     ports:
       - "8000:8000"
     depends_on:
+      - db
       - chromadb
     environment:
+      - DATABASE_URL=postgresql://shiva:Shivam007@db:5432/workflowdb
       - CHROMA_HOST=chromadb
       - CHROMA_PORT=8000
     volumes:
@@ -27,6 +29,19 @@ services:
       - NEXT_PUBLIC_API_URL=http://localhost:8000
     command: npm run dev
 
+  db:
+    image: postgres:15
+    container_name: workflow-db
+    restart: always
+    environment:
+      POSTGRES_USER: shiva
+      POSTGRES_PASSWORD: Shivam007
+      POSTGRES_DB: workflowdb
+    ports:
+      - "5433:5432" # host:container
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
   chromadb:
     image: chromadb/chroma:latest
     container_name: workflow-chroma
@@ -36,4 +51,5 @@ services:
       - chroma_data:/chroma
 
 volumes:
+  postgres_data:
   chroma_data:
