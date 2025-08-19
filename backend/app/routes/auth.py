@@ -1,6 +1,8 @@
 from fastapi import APIRouter, HTTPException, Depends
+from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.responses import JSONResponse
+
 
 from app.db.deps import get_db
 from app.models.models import User
@@ -9,7 +11,7 @@ from app.core.security import hash_password, verify_password, decode_access_toke
 
 router= APIRouter(prefix="/auth", tags=["auth"])
 
-oauth2_scheme= OAuth2PasswordBearer(tokenUrl="/auth/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
 
 
 # Signup route
@@ -37,19 +39,32 @@ def login_json(user_in: UserCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=401, detail="Invalid credentials")
     
     token = create_access_token({"sub": str(user.id)})
-    return {"access_token": token, "token_type": "bearer"}
     
-
+    # Respond : JSON response
+    response = JSONResponse(
+        content={"access_token": token, "token_type": "bearer"}
+    )
+    return response
 
 # protected route: get current user
-def get_current_user(token:str= Depends(oauth2_scheme), db:Session= Depends(get_db))->User:
-    payload=decode_access_token(token)
+def get_current_user(
+    token: str = Depends(oauth2_scheme),
+    db: Session = Depends(get_db)
+) -> User:
+    if not token:
+        raise HTTPException(status_code=401, detail="Missing token")
+
+    payload = decode_access_token(token)
     if not payload:
-        raise HTTPException(status_code=401, detail="Invalid Token")
+        raise HTTPException(status_code=401, detail="Invalid token")
+
     user_id = payload.get("sub")
-    
     user = db.query(User).get(int(user_id))
     if not user:
         raise HTTPException(status_code=401, detail="User not found")
+    
     return user
-
+# current user route
+@router.get("/me", response_model=UserOut)
+def get_me(current_user:User=Depends(get_current_user)):
+    return current_user
