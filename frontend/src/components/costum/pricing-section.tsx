@@ -2,6 +2,8 @@
 
 import { useState } from "react"
 
+import { handlePayment } from "../../lib/payment";
+
 export default function PricingSection() {
   const [billingPeriod, setBillingPeriod] = useState<"monthly" | "annually">("monthly")
 
@@ -46,7 +48,10 @@ export default function PricingSection() {
           <div className="text-sm text-[#F0EDEE]">Unlimited workflows + export (JSON / PNG)</div>
           <div className="text-4xl font-serif">$5 / ₹120</div>
           <div className="text-sm text-[#F0EDEE]">per month</div>
-          <button className="w-full py-2 bg-white text-[#FF0080] font-medium">
+          <button
+            className="w-full py-2 bg-white text-[#FF0080] font-medium"
+            onClick={handlePayment}
+          >
             Get started
           </button>
           <ul className="text-sm text-[#F0EDEE] list-disc pl-5 flex flex-col gap-1">

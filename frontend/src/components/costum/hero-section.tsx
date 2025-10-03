@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button"
+import Link from "next/link"
 
 export function HeroSection() {
   return (
@@ -17,9 +18,11 @@ export function HeroSection() {
 
           {/* CTA Button */}
           <div className="flex justify-center">
-            <Button className="h-12 px-14 bg-primary hover:bg-secondary text-background rounded-full font-medium text-sm shadow-none">
-              Start for free
-            </Button>
+            <Link href="/auth/signup">
+              <Button className="h-12 px-14 bg-primary text-background font-medium text-lg shadow-none">
+                Start for free
+              </Button>
+            </Link>
           </div>
         </div>
       </div>

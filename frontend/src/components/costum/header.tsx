@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button"
+import Link from "next/link"
 
 export function Header() {
   return (
@@ -11,9 +12,11 @@ export function Header() {
               <span className="text-[#FF0080]">t</span>ype
             </div>
           </div>
-          <Button variant="ghost" className="text-text-primary hover:bg-secondary/10">
-            Log in
-          </Button>
+          <Link href="/auth/login">
+            <Button className="bg-primary text-white hover:bg-primary/90">
+              Log in
+            </Button>
+          </Link>
         </nav>
       </div>
     </header>

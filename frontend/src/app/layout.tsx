@@ -99,6 +99,9 @@ export default function RootLayout({
       className={`${poppins.variable} antialiased`}
       suppressHydrationWarning
     >
+      <head>
+        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+      </head>
       <body className="font-sans antialiased">
         {children}
       </body>
