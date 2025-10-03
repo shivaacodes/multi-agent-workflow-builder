@@ -9,7 +9,7 @@ from app.models.models import User
 from app.schemas.auth import UserCreate, UserOut, Token
 from app.core.security import hash_password, verify_password, decode_access_token, create_access_token
 
-router= APIRouter(prefix="/auth", tags=["auth"])
+router= APIRouter(tags=["auth"])
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
 

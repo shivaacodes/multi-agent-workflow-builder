@@ -15,10 +15,12 @@ export default function AuthForm({ mode }: AuthFormProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const router= useRouter()
+  const [error, setError] = useState("");
+  const router = useRouter();
 
   const handleSubmit = async () => {
     setLoading(true);
+    setError("");
     try {
       const url =
         mode === "signup"
@@ -30,14 +32,16 @@ export default function AuthForm({ mode }: AuthFormProps) {
 
       if (res.data.access_token) {
         localStorage.setItem("access_token", res.data.access_token);
+        if (mode === "signup") {
+          router.push("/auth/login");
+        } else {
+          router.push("/workflows");
+        }
       }
 
       console.log(`${mode} successful`, res.data);
-
-      if (mode=="login"){
-        router.push("/dashboard");
-      }
     } catch (err: any) {
+      setError(err.response?.data?.detail || "Something went wrong");
       console.error(err.response?.data || "Something went wrong");
     } finally {
       setLoading(false);
